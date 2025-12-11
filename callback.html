@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TikTok Authorization</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 { color: #00f2ea; }
+        .code-box {
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+            word-break: break-all;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        .success { color: green; }
+        .error { color: red; }
+        button {
+            background: #00f2ea;
+            color: black;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover { background: #00d9d1; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎵 TikTok Authorization</h1>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const code = params.get('code');
+        const error = params.get('error');
+        const errorDescription = params.get('error_description');
+        
+        const resultDiv = document.getElementById('result');
+        
+        if (code) {
+            resultDiv.innerHTML = `
+                <p class="success">✅ Autorisatie gelukt!</p>
+                <p>Kopieer deze code en plak in je terminal:</p>
+                <div class="code-box" id="codeBox">${code}</div>
+                <button onclick="copyCode()">📋 Kopieer Code</button>
+                <p style="margin-top: 20px; color: #666;">Je kunt dit venster sluiten na het kopiëren.</p>
+            `;
+        } else if (error) {
+            resultDiv.innerHTML = `
+                <p class="error">❌ Fout: ${error}</p>
+                <p>${errorDescription || 'Onbekende fout'}</p>
+            `;
+        } else {
+            resultDiv.innerHTML = `
+                <p class="error">❌ Geen autorisatiecode ontvangen</p>
+            `;
+        }
+        
+        function copyCode() {
+            navigator.clipboard.writeText(code);
+            document.querySelector('button').textContent = '✅ Gekopieerd!';
+        }
+    </script>
+</body>
+</html>
